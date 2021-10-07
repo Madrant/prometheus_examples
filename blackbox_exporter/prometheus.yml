@@ -42,6 +42,6 @@ scrape_configs:
       # Save temporary label '__param_target' to label 'instance'
       - source_labels: [__param_target]
         target_label: instance
-      # 
+      # Place blackbox_exporter's URL at target's place
       - target_label: __address__
         replacement: localhost:9115
