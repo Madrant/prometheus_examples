@@ -8,6 +8,7 @@ bbe_config_path="/etc/blackbox_exporter/blackbox.yml"
 
 # Build docker command
 docker_cmd="docker run \
+--add-host host.docker.internal:host-gateway
 -p 9115:9115 \
 --mount type=bind,source=\"${bbe_config_local}\",target=\"${bbe_config_path}\",readonly ${docker_image} \
 --config.file=\"${bbe_config_path}\""

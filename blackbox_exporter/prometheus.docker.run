@@ -10,7 +10,8 @@ prom_config_path="/etc/prometheus/prometheus.yml"
 #
 # don't use --network=host in production
 docker_cmd="docker run \
---network=\"host\" \
+--network=host \
+--add-host host.docker.internal:host-gateway
 --mount type=bind,source=\"${prom_config_local}\",target=\"${prom_config_path}\",readonly ${docker_image} \
 --config.file=\"${prom_config_path}\""
 
