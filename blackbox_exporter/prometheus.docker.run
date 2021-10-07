@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Docker configuration
+docker_image="prom/prometheus"
+
+prom_config_local="$(readlink -f $(pwd)/prometheus.yml)"
+prom_config_path="/etc/prometheus/prometheus.yml"
+
+# Build docker command
+#
+# don't use --network=host in production
+docker_cmd="docker run \
+--network=\"host\" \
+--mount type=bind,source=\"${prom_config_local}\",target=\"${prom_config_path}\",readonly ${docker_image} \
+--config.file=\"${prom_config_path}\""
+
+# Execute docker command
+echo "docker cmd: ${docker_cmd}"
+eval $docker_cmd

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Docker configuration
+docker_image="prom/blackbox-exporter"
+
+bbe_config_local="$(readlink -f $(pwd)/blackbox.yml)"
+bbe_config_path="/etc/blackbox_exporter/blackbox.yml"
+
+# Build docker command
+docker_cmd="docker run \
+-p 9115:9115 \
+--mount type=bind,source=\"${bbe_config_local}\",target=\"${bbe_config_path}\",readonly ${docker_image} \
+--config.file=\"${bbe_config_path}\""
+
+# Execute docker command
+echo "docker cmd: ${docker_cmd}"
+eval $docker_cmd
