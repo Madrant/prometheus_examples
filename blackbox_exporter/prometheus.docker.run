@@ -4,7 +4,12 @@
 docker_image="prom/prometheus"
 
 prom_config_local="$(readlink -f $(pwd)/prometheus.yml)"
-prom_config_path="/etc/prometheus/prometheus.yml"
+prom_config_docker="/etc/prometheus/prometheus.yml"
+
+prom_rules_dir_local="$(readlink -f $(pwd)/rules)"
+prom_rules_dir_docker="/etc/prometheus/rules"
+
+prom_params="--config.file=\"${prom_config_docker}\""
 
 # Build docker command
 #
@@ -12,8 +17,9 @@ prom_config_path="/etc/prometheus/prometheus.yml"
 docker_cmd="docker run \
 --network=host \
 --add-host host.docker.internal:host-gateway
---mount type=bind,source=\"${prom_config_local}\",target=\"${prom_config_path}\",readonly ${docker_image} \
---config.file=\"${prom_config_path}\""
+--mount type=bind,source=\"${prom_config_local}\",target=\"${prom_config_docker}\",readonly \
+--mount type=bind,source=\"${prom_rules_dir_local}\",target=\"${prom_rules_dir_docker}\",readonly \
+${docker_image} ${prom_params}"
 
 # Execute docker command
 echo "docker cmd: ${docker_cmd}"
