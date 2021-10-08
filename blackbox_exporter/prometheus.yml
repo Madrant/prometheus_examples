@@ -67,7 +67,7 @@ scrape_configs:
         target_label: __param_target
       # Save target from 'targets' to label 'instance'
       - source_labels: [__param_target]
-        target_label: instance
+        target_label: target
       # Save module name to label 'module'
       - source_labels: [__param_module]
         target_label: module
