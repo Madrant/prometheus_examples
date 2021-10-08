@@ -66,11 +66,21 @@ scrape_configs:
       - source_labels: [__address__]
         target_label: __param_target
       # Save target from 'targets' to label 'instance'
-      - source_labels: [__address__]
+      - source_labels: [__param_target]
         target_label: instance
       # Save module name to label 'module'
       - source_labels: [__param_module]
         target_label: module
+      # Get hostname (only format hostname:port is supported)
+      - source_labels: [__param_target]
+        regex: '^([A-Za-z0-9-_~.]+):?([0-9]*)'
+        replacement: '$1'
+        target_label: host
+      # Get port from target (only format hostname:port is supported)
+      - source_labels: [__param_target]
+        regex: '^([A-Za-z0-9-_~.]+):?([0-9]*)'
+        replacement: '${2}'
+        target_label: port
       # Place blackbox_exporter's URL at target's place
       - target_label: __address__
         replacement: localhost:9115
