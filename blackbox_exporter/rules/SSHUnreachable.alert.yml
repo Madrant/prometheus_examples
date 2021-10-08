@@ -1,0 +1,11 @@
+groups:
+- name: SSH Hosts
+  rules:
+
+  - alert: SSHUnreachable
+    expr: probe_success{module="tcp_connect"} != 1
+    for: 1m
+    labels:
+      severity: high
+    annotations:
+      summary: "Host unreachable {{ $labels.instance }}"
