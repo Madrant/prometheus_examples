@@ -38,12 +38,15 @@ scrape_configs:
       - targets:
         - 8.8.8.8 # There will be placed __address__
     relabel_configs:
-      # Save target address to temporary (started with '__' prefix) label
+      # Set target for prober from 'targets'
       - source_labels: [__address__]
         target_label: __param_target
-      # Save temporary label '__param_target' to label 'instance'
-      - source_labels: [__param_target]
+      # Save target address to metric's label 'instance'
+      - source_labels: [__address__]
         target_label: instance
+      # Save module name to metric
+      - source_labels: [__param_module]
+        target_label: module
       # Place blackbox_exporter's URL at target's place
       - target_label: __address__
         replacement: localhost:9115
@@ -59,9 +62,15 @@ scrape_configs:
       - targets:
         - host.docker.internal:22
     relabel_configs:
+      # Set target for prober from 'targets'
       - source_labels: [__address__]
         target_label: __param_target
-      - source_labels: [__param_target]
+      # Save target from 'targets' to label 'instance'
+      - source_labels: [__address__]
         target_label: instance
+      # Save module name to label 'module'
+      - source_labels: [__param_module]
+        target_label: module
+      # Place blackbox_exporter's URL at target's place
       - target_label: __address__
         replacement: localhost:9115
